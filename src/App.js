@@ -1,23 +1,42 @@
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
+const App = () => {
+
+  let arr = [];
+
+  const updateSlowArray = () => {
+    for (let i = 0 ; i <= 1000000; i++){
+      arr.push(`items${i}`)
+    }
+  }
+  
+  const updateFastArray = () => {
+    for (let i = 0 ; i <= 1000; i++){
+      arr.push(`items${i}`)
+    }
+  }
+
+  const handleClick = (e) => {
+    performance.mark('start-computation');
+    if(e.target.id === 'slow'){
+      updateSlowArray()
+    }
+    else{
+      updateFastArray()
+    }
+    performance.mark('stop-computation');
+    performance.measure('final-computation', 'start-computation', 'stop-computation');
+    console.log(performance.getEntriesByName('final-computation'))
+    performance.clearMeasures()
+    performance.clearMarks();
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <h1>Performance Test</h1>
+    <button id="slow" onClick={handleClick}>Slow Performance</button>
+    <button id="fast" onClick={handleClick}>Fast Performance</button>
     </div>
   );
 }
